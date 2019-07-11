@@ -29,6 +29,10 @@ export interface AttributeValueCreate_attributeValueCreate_attribute {
   id: string;
   name: string | null;
   slug: string | null;
+  visibleInStorefront: boolean | null;
+  filterableInDashboard: boolean | null;
+  filterableInStorefront: boolean | null;
+  storefrontSearchPosition: number | null;
   values: (AttributeValueCreate_attributeValueCreate_attribute_values | null)[] | null;
 }
 
