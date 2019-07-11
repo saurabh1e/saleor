@@ -167,7 +167,13 @@ const AttributeDetails: React.FC<AttributeDetailsProps> = ({ id, params }) => {
                                     attributeUpdate({
                                       variables: {
                                         id,
-                                        input
+                                        input: {
+                                          ...input,
+                                          storefrontSearchPosition: parseInt(
+                                            input.storefrontSearchPosition,
+                                            0
+                                          )
+                                        }
                                       }
                                     })
                                   }
