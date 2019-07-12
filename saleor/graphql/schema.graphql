@@ -1482,6 +1482,21 @@ type MenuUpdate {
   menu: Menu
 }
 
+type MetaClientStore {
+  name: String!
+  metadata: [MetaItem]
+}
+
+type MetaItem {
+  key: String!
+  value: String!
+}
+
+type MetaStore {
+  label: String!
+  clients: [MetaClientStore]
+}
+
 type Money {
   currency: String!
   amount: Float!
@@ -3048,6 +3063,7 @@ type User implements Node {
   avatar(size: Int): Image
   events: [CustomerEvent]
   storedPaymentSources: [PaymentSource]
+  privateMeta: [MetaStore]
 }
 
 input UserAddressInput {
