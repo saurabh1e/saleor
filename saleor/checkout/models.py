@@ -12,6 +12,7 @@ from django.utils.timezone import now
 from django_prices.models import MoneyField
 
 from ..account.models import Address
+from ..core.models import ModelWithMetadata
 from ..core.taxes import zero_money
 from ..core.weight import zero_weight
 from ..giftcard.models import GiftCard
@@ -37,7 +38,7 @@ class CheckoutQueryset(models.QuerySet):
         )  # noqa
 
 
-class Checkout(models.Model):
+class Checkout(ModelWithMetadata):
     """A shopping checkout."""
 
     created = models.DateTimeField(auto_now_add=True)
@@ -90,6 +91,9 @@ class Checkout(models.Model):
 
     def __len__(self):
         return self.lines.count()
+
+    def get_customer_email(self):
+        return self.user.email if self.user else self.email
 
     def is_shipping_required(self):
         """Return `True` if any of the lines requires shipping."""

@@ -29,6 +29,7 @@ class Query(
     ShippingQueries,
     ShopQueries,
     TranslationQueries,
+    UpdateShippingQueries
 ):
     node = graphene.Node.Field()
 
