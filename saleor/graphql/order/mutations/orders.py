@@ -344,3 +344,31 @@ class OrderRefund(BaseMutation):
             order=order, user=info.context.user, amount=amount, payment=payment
         )
         return OrderRefund(order=order)
+
+
+class OrderShippingInput(graphene.InputObjectType):
+    delivery_date = graphene.Date(description="delivery date for the order", name="message")
+    time_slot = graphene.String(description="time slot for delviery")
+
+
+class OrderShipping(BaseMutation):
+    order = graphene.Field(Order, description="Order with the note added.")
+
+    class Arguments:
+        id = graphene.ID(
+            required=True,
+            description="ID of the order to add a note for.",
+            name="order",
+        )
+        input = OrderShippingInput(
+            required=True, description="Fields required to create a note for the order."
+        )
+
+    class Meta:
+        description = "Adds note to the order."
+        permissions = ("order.manage_orders",)
+
+    @classmethod
+    def perform_mutation(cls, _root, info, **data):
+        order = cls.get_node_or_error(info, data.get("id"), only_type=Order)
+        return OrderShipping(order=order)

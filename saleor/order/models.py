@@ -307,6 +307,12 @@ class Order(models.Model):
         return self.weight
 
 
+class OrderShipping(models.Model):
+    delivery_date = models.DateField(default=now)
+    time_slot = models.CharField(max_length=64, null=True)
+    order = models.OneToOneField(Order, on_delete=models.CASCADE, unique=True)
+
+
 class OrderLineQueryset(models.QuerySet):
     def digital(self):
         """Returns lines with digital products"""

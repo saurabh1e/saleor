@@ -8,6 +8,7 @@ from django.contrib.postgres.fields import JSONField
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.encoding import smart_str
+from django.utils.timezone import now
 from django_prices.models import MoneyField
 
 from ..account.models import Address
@@ -137,6 +138,12 @@ class Checkout(models.Model):
     def get_last_active_payment(self):
         payments = [payment for payment in self.payments.all() if payment.is_active]
         return max(payments, default=None, key=attrgetter("pk"))
+
+
+class CheckoutShipping(models.Model):
+    delivery_date = models.DateField(default=now)
+    time_slot = models.CharField(max_length=64, null=True)
+    checkout = models.OneToOneField(Checkout, on_delete=models.CASCADE, unique=True)
 
 
 class CheckoutLine(models.Model):

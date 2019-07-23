@@ -13,3 +13,7 @@ def resolve_checkouts():
 
 def resolve_checkout(token):
     return models.Checkout.objects.filter(token=token).first()
+
+
+def resolve_shipping():
+    return models.CheckoutShipping.objects.all()

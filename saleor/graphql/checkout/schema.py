@@ -19,7 +19,7 @@ from .mutations import (
     CheckoutShippingAddressUpdate,
     CheckoutShippingMethodUpdate,
     CheckoutUpdateVoucher,
-)
+    CheckoutShippingUpdate)
 from .resolvers import resolve_checkout, resolve_checkout_lines, resolve_checkouts
 from .types import Checkout, CheckoutLine
 
@@ -70,3 +70,4 @@ class CheckoutMutations(graphene.ObjectType):
     checkout_shipping_address_update = CheckoutShippingAddressUpdate.Field()
     checkout_shipping_method_update = CheckoutShippingMethodUpdate.Field()
     checkout_update_voucher = CheckoutUpdateVoucher.Field()
+    checkout_shipping_update = CheckoutShippingUpdate.Field()

@@ -1,6 +1,7 @@
 import graphene
 import graphene_django_optimizer as gql_optimizer
 from django.conf import settings
+from graphene import relay
 
 from ...checkout import models
 from ...core.taxes import zero_taxed_money
@@ -45,6 +46,22 @@ class CheckoutLine(CountableDjangoObjectType):
         return root.is_shipping_required()
 
 
+class CheckoutShipping(CountableDjangoObjectType):
+    delivery_date = graphene.Date(description="Date of delivery of the order.")
+    time_slot = graphene.String(description="Time slot of the delivery of the order.")
+
+    class Meta:
+        description = "Represents shipping date of particular order."
+        model = models.CheckoutShipping
+        interfaces = [relay.Node]
+        only_fields = [
+            "id",
+            "delivery_date",
+            "time_slot",
+        ]
+        filter_fields = ["id"]
+
+
 class Checkout(CountableDjangoObjectType):
     available_shipping_methods = graphene.List(
         ShippingMethod,
@@ -56,6 +73,7 @@ class Checkout(CountableDjangoObjectType):
         description="List of available payment gateways.",
         required=True,
     )
+    shipping = graphene.Field(CheckoutShipping)
     email = graphene.String(description="Email of a customer", required=True)
     gift_cards = gql_optimizer.field(
         graphene.List(
@@ -157,3 +175,4 @@ class Checkout(CountableDjangoObjectType):
     @staticmethod
     def resolve_is_shipping_required(root: models.Checkout, _info):
         return root.is_shipping_required()
+

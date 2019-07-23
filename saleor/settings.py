@@ -50,12 +50,12 @@ CACHES = {"default": django_cache_url.config()}
 
 DATABASES = {
     "default": dj_database_url.config(
-        default="postgres://saleor:saleor@localhost:5432/saleor", conn_max_age=600
+        default="postgres://postgres:igdefault@localhost:5432/saleor", conn_max_age=600
     )
 }
 
 
-TIME_ZONE = "America/Chicago"
+TIME_ZONE = "Asia/Kolkata"
 LANGUAGE_CODE = "en"
 LANGUAGES = [
     ("ar", _("Arabic")),
@@ -326,8 +326,8 @@ AUTH_USER_MODEL = "account.User"
 
 LOGIN_URL = "/account/login/"
 
-DEFAULT_COUNTRY = os.environ.get("DEFAULT_COUNTRY", "US")
-DEFAULT_CURRENCY = os.environ.get("DEFAULT_CURRENCY", "USD")
+DEFAULT_COUNTRY = os.environ.get("DEFAULT_COUNTRY", "IN")
+DEFAULT_CURRENCY = os.environ.get("DEFAULT_CURRENCY", "INR")
 DEFAULT_DECIMAL_PLACES = get_currency_fraction(DEFAULT_CURRENCY)
 DEFAULT_MAX_DIGITS = 12
 AVAILABLE_CURRENCIES = [DEFAULT_CURRENCY]

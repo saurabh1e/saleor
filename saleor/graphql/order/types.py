@@ -468,3 +468,19 @@ class Order(CountableDjangoObjectType):
     @staticmethod
     def resolve_gift_cards(root: models.Order, _info):
         return root.gift_cards.all()
+
+
+class OrderShipping(CountableDjangoObjectType):
+    delivery_date = graphene.Date(description="Date of delivery of the order.")
+    time_slot = graphene.String(description="Time slot of the delivery of the order.")
+    order = graphene.Field(Order, description="shipping details of this order.")
+
+    class Meta:
+        description = "Represents shipping date of particular order."
+        model = models.OrderShipping
+        interfaces = [relay.Node]
+        only_fields = [
+            "id",
+            "delivery_date",
+            "time_slot",
+        ]

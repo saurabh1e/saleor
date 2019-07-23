@@ -625,3 +625,31 @@ class CheckoutRemovePromoCode(BaseMutation):
         )
         remove_promo_code_from_checkout(checkout, promo_code)
         return CheckoutUpdateVoucher(checkout=checkout)
+
+
+class CheckoutShippingInput(graphene.InputObjectType):
+    delivery_date = graphene.Date(description="delivery date for the order", name="message")
+    time_slot = graphene.String(description="time slot for delivery")
+
+
+class CheckoutShippingUpdate(BaseMutation):
+    checkout = graphene.Field(Checkout, description="Checkout with the note added.")
+
+    class Arguments:
+        # id = graphene.ID(
+        #     required=True,
+        #     description="ID of the order to add a note for.",
+        #     name="checkout",
+        # )
+        checkout_id = graphene.ID(required=True, description="ID of the Checkout.")
+        delivery_date = graphene.Date(description="delivery date for the order", name="message")
+        time_slot = graphene.String(description="time slot for delivery")
+
+    class Meta:
+        description = "Adds note to the order."
+        permissions = ("order.manage_orders",)
+
+    @classmethod
+    def perform_mutation(cls, _root, info, **data):
+        checkout = cls.get_node_or_error(info, data.get("id"), only_type=Checkout)
+        return CheckoutShippingUpdate(checkout=checkout)
