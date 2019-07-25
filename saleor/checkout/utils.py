@@ -1271,3 +1271,36 @@ def clean_checkout(checkout: Checkout, discounts):
         raise ValidationError(
             "Provided payment methods can not cover the checkout's total " "amount"
         )
+
+
+def create_delivery_schedule_order(checkout_line: "CheckoutLine", discounts) -> OrderLine:
+    """
+    :raises InsufficientStock: when there is not enough items in stock for this variant
+    """
+
+    quantity = checkout_line.quantity
+    variant = checkout_line.variant
+    variant.check_quantity(quantity)
+
+    product_name = variant.display_product()
+    translated_product_name = variant.display_product(translated=True)
+
+    if translated_product_name == product_name:
+        translated_product_name = ""
+
+    total_line_price = calculate_checkout_line_total(checkout_line, discounts)
+    unit_price = quantize_price(
+        total_line_price / checkout_line.quantity, total_line_price.currency
+    )
+    line = OrderLine(
+        product_name=product_name,
+        translated_product_name=translated_product_name,
+        product_sku=variant.sku,
+        is_shipping_required=variant.is_shipping_required(),
+        quantity=quantity,
+        variant=variant,
+        unit_price=unit_price,
+        tax_rate=unit_price.tax / unit_price.net,
+    )
+
+    return line

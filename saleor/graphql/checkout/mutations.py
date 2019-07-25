@@ -44,7 +44,7 @@ from ..core.utils import from_global_id_strict_type
 from ..order.types import Order
 from ..product.types import ProductVariant
 from ..shipping.types import ShippingMethod
-from .types import Checkout, CheckoutLine
+from .types import Checkout, CheckoutLine, CheckoutDeliverySchedule
 
 
 def clean_shipping_method(
@@ -692,7 +692,7 @@ class CheckoutClearStoredPrivateMeta(ClearMetaBaseMutation):
         public = False
 
 
-class CheckoutShippingInput(graphene.InputObjectType):
+class CheckoutDeliveryScheduleInput(graphene.InputObjectType):
     delivery_date = graphene.Date(description="delivery date for the order", name="message")
     time_slot = graphene.String(description="time slot for delivery")
 
@@ -718,3 +718,22 @@ class CheckoutShippingUpdate(BaseMutation):
     def perform_mutation(cls, _root, info, **data):
         checkout = cls.get_node_or_error(info, data.get("id"), only_type=Checkout)
         return CheckoutShippingUpdate(checkout=checkout)
+
+
+class CheckoutAddDeliverySchedule(BaseMutation):
+    checkout = graphene.Field(
+        Checkout, description="The checkout with the added gift card or voucher"
+    )
+
+    class Arguments:
+        checkout_id = graphene.ID(description="Checkout ID", required=True)
+        time_slot = graphene.String(
+            description="Gift card code or voucher code", required=True
+        )
+        delivery_date = graphene.Date(
+            description="Gift card code or voucher code", required=True
+        )
+
+    class Meta:
+        description = "Creates a new delivery schedule"
+        model = models.CheckoutDeliverySchedule

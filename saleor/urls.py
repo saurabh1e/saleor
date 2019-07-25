@@ -25,26 +25,26 @@ handler404 = "saleor.core.views.handle_404"
 non_translatable_urlpatterns = [
     url(r"^dashboard/", include((dashboard_urls, "dashboard"), namespace="dashboard")),
     url(r"^graphql/", csrf_exempt(GraphQLView.as_view(schema=schema)), name="api"),
-    url(
-        r"^sitemap\.xml$",
-        sitemap,
-        {"sitemaps": sitemaps},
-        name="django.contrib.sitemaps.views.sitemap",
-    ),
-    url(r"^i18n/$", set_language, name="set_language"),
-    url("", include("social_django.urls", namespace="social")),
+    # url(
+    #     r"^sitemap\.xml$",
+    #     sitemap,
+    #     {"sitemaps": sitemaps},
+    #     name="django.contrib.sitemaps.views.sitemap",
+    # ),
+    # url(r"^i18n/$", set_language, name="set_language"),
+    # url("", include("social_django.urls", namespace="social")),
 ]
 
 translatable_urlpatterns = [
-    url(r"^", include(core_urls)),
-    url(r"^checkout/", include((checkout_urls, "checkout"), namespace="checkout")),
-    url(r"^jsi18n/$", JavaScriptCatalog.as_view(), name="javascript-catalog"),
-    url(r"^order/", include((order_urls, "order"), namespace="order")),
-    url(r"^page/", include((page_urls, "page"), namespace="page")),
-    url(r"^products/", include((product_urls, "product"), namespace="product")),
-    url(r"^account/", include((account_urls, "account"), namespace="account")),
-    url(r"^feeds/", include((feed_urls, "data_feeds"), namespace="data_feeds")),
-    url(r"^search/", include((search_urls, "search"), namespace="search")),
+    # url(r"^", include(core_urls)),
+    # url(r"^checkout/", include((checkout_urls, "checkout"), namespace="checkout")),
+    # url(r"^jsi18n/$", JavaScriptCatalog.as_view(), name="javascript-catalog"),
+    # url(r"^order/", include((order_urls, "order"), namespace="order")),
+    # url(r"^page/", include((page_urls, "page"), namespace="page")),
+    # url(r"^products/", include((product_urls, "product"), namespace="product")),
+    # url(r"^account/", include((account_urls, "account"), namespace="account")),
+    # url(r"^feeds/", include((feed_urls, "data_feeds"), namespace="data_feeds")),
+    # url(r"^search/", include((search_urls, "search"), namespace="search")),
 ]
 
 urlpatterns = non_translatable_urlpatterns + i18n_patterns(*translatable_urlpatterns)

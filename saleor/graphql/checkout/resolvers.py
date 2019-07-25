@@ -17,3 +17,12 @@ def resolve_checkout(token):
 
 def resolve_shipping():
     return models.CheckoutShipping.objects.all()
+
+
+def resolve_checkout_delivery_schedules():
+    queryset = models.CheckoutDeliverySchedule.objects.all()
+    return queryset
+
+
+def resolve_checkout_delivery_schedule(token):
+    return models.CheckoutDeliverySchedule.objects.filter(token=token).first()

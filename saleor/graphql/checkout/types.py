@@ -1,6 +1,7 @@
 import graphene
 import graphene_django_optimizer as gql_optimizer
 from django.conf import settings
+from graphene_django import DjangoObjectType
 from graphql_jwt.decorators import permission_required
 
 from ...checkout import models
@@ -64,6 +65,22 @@ class CheckoutShipping(CountableDjangoObjectType):
         filter_fields = ["id"]
 
 
+class CheckoutDeliverySchedule(CountableDjangoObjectType):
+    delivery_date = graphene.Date()
+    time_slot = graphene.String()
+
+    class Meta:
+        description = "Represents shipping date of particular order."
+        model = models.CheckoutDeliverySchedule
+        interfaces = [graphene.relay.Node]
+        only_fields = [
+            "id",
+            "delivery_date",
+            "time_slot",
+        ]
+        filter_fields = ["id"]
+
+
 class Checkout(MetadataObjectType, CountableDjangoObjectType):
     available_shipping_methods = graphene.List(
         ShippingMethod,
@@ -96,6 +113,7 @@ class Checkout(MetadataObjectType, CountableDjangoObjectType):
         ),
         model_field="lines",
     )
+    checkout_delivery_schedule = graphene.Field(CheckoutDeliverySchedule)
     shipping_price = graphene.Field(
         TaxedMoney,
         description="The price of the shipping, with all the taxes included.",
@@ -126,6 +144,7 @@ class Checkout(MetadataObjectType, CountableDjangoObjectType):
             "shipping_address",
             "shipping_method",
             "token",
+            "checkout_delivery_date",
             "translated_discount_name",
             "user",
             "voucher_code",

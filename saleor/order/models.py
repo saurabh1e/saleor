@@ -81,6 +81,7 @@ class Order(models.Model):
         Address, related_name="+", editable=False, null=True, on_delete=models.SET_NULL
     )
     user_email = models.EmailField(blank=True, default="")
+
     shipping_method = models.ForeignKey(
         ShippingMethod,
         blank=True,
@@ -467,3 +468,14 @@ class OrderEvent(models.Model):
 
     def __repr__(self):
         return f"{self.__class__.__name__}(type={self.type!r}, user={self.user!r})"
+
+
+class OrderDeliverySchedule(models.Model):
+
+    delivery_date = models.DateField()
+    time_slot = models.CharField(max_length=64)
+
+    order = models.ForeignKey(
+        Order, related_name="order_delivery_date", editable=False, null=False, on_delete=models.CASCADE
+    )
+

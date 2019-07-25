@@ -201,3 +201,14 @@ class CheckoutLine(models.Model):
     def is_shipping_required(self):
         """Return `True` if the related product variant requires shipping."""
         return self.variant.is_shipping_required()
+
+
+class CheckoutDeliverySchedule(models.Model):
+
+    delivery_date = models.DateField()
+    time_slot = models.CharField(max_length=64)
+
+    checkout = models.ForeignKey(
+        Checkout, related_name="checkout_delivery_date", editable=False, null=False, on_delete=models.CASCADE
+    )
+
